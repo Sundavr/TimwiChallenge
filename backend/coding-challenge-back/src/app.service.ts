@@ -7,13 +7,11 @@ import { AlbumDto } from './DTO/album.dto';
 import { ArtistDto } from './DTO/artist.dto';
 import { ArtistAlbumDto } from './DTO/artistAlbum.dto';
 
-const fetch = require("node-fetch")
-
 @Injectable()
 export class AppService {
   private token: string;
   private spotifyApi: string;
-
+  
   constructor(private httpService: HttpService) {
     // TODO
     this.token = this.generateToken();
@@ -61,7 +59,7 @@ export class AppService {
       return response.data.artists.items.map(artist => new Artist(artist as ArtistDto));
     });
   }
-  
+
   /**
    * Given an artist ID, returns 20 albums of this artist.
    * @param artistId ID of this artist
