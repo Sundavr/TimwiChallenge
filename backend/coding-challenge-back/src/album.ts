@@ -1,5 +1,4 @@
 import { AlbumDto } from "./dto/album.dto";
-import { AlbumFromIdDto } from "./dto/albumFromId.dto";
 import { ArtistAlbumDto } from "./dto/artistAlbum.dto";
 import { NewAlbumDto } from "./library/dto/newAlbum.dto";
 import { AlbumInterface } from "./library/interfaces/album.interface";
@@ -45,8 +44,8 @@ export class Album {
             album.id,
             album.name,
             album.artists.map(artist => new AlbumArtist(artist.id, artist.name)),
-            album.album.release_date,
-            album.duration_ms,
+            album.release_date,
+            undefined, // TODO
             favorite,
             tag
         );
@@ -65,7 +64,7 @@ export class Album {
             album.name,
             album.artists.map(artist => new AlbumArtist(artist.id, artist.name)),
             album.release_date,
-            undefined, // duration is not provided for ArtistAlbumDto
+            undefined, // TODO
             favorite,
             tag
         );
@@ -99,18 +98,6 @@ export class Album {
             album.duration,
             album.favorite,
             album.tag
-        );
-    }
-
-    static fromAlbumFromId(album: AlbumFromIdDto, favorite?: boolean, tag?: string) {
-        return new Album(
-            album.id,
-            album.name,
-            album.artists.map(artist => new AlbumArtist(artist.id, artist.name)),
-            album.release_date,
-            undefined, // duration is not provided for AlbumFromId
-            favorite,
-            tag
         );
     }
 

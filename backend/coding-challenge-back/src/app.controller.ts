@@ -27,7 +27,7 @@ export class AppController {
   }
 
   @Get("search")
-  findAlbum(@Query("album") album: string, @Query("artist") artist: string) {
+  search(@Query("album") album: string, @Query("artist") artist: string) {
     this.logger.verbose("findAlbum()");
     if (album) {
       return this.appService.searchAlbum(album);

@@ -30,6 +30,7 @@ async function bootstrap() {
   if (!PORT) {
     logger.warn("Impossible to read the PORT from .env");
   }
+  app.enableCors();
   await app.listen(PORT || 3000);
   logger.log("server running on port " + (PORT || 3000) + " ...");
 }

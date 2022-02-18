@@ -6,7 +6,6 @@ import { Logger, Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 
 import * as dotenv from "dotenv";
-import { AlbumSchema } from './library/schemas/album.schema';
 
 // Environment variables
 const result = dotenv.config();

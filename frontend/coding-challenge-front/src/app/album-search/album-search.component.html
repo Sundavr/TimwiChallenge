@@ -1,0 +1,11 @@
+<div id="search-component">
+    <label for="search-box">Album Search</label>
+    <input #searchBox id="search-box" (input)="search(searchBox.value)" />
+  
+    <ul class="search-result">
+      <li *ngFor="let album of albums$ | async" >
+        <span class="badge">{{album.title}}</span> {{album.releaseDate}}
+          <button class="add" title="add album" (click)="addAlbum(album)">➕</button>
+      </li>
+    </ul>
+  </div>

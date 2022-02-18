@@ -4,7 +4,6 @@ import { catchError, map, Observable } from 'rxjs';
 import { Album } from './album';
 import { Artist } from './artist';
 import { AlbumDto } from './dto/album.dto';
-import { AlbumFromIdDto } from './dto/albumFromId.dto';
 import { ArtistDto } from './dto/artist.dto';
 import { ArtistAlbumDto } from './dto/artistAlbum.dto';
 import { MyLogger } from './myLogger';
@@ -37,7 +36,7 @@ export class AppService {
   public getAlbum(albumId: string): Observable<Album> {
     this.logger.verbose("getAlbum(" + albumId + ")");
     return this.spotifyRequest("albums/" + albumId, response => {
-      return Album.fromAlbumFromId(response.data as AlbumFromIdDto)
+      return Album.fromAlbumDto(response.data as AlbumDto)
     });
   }
 
@@ -48,8 +47,8 @@ export class AppService {
    */
   public searchAlbum(albumName: string): Observable<Album> {
     this.logger.verbose("searchAlbum(" + albumName + ")");
-    return this.spotifyRequest("search/?q=" + albumName + "&type=track", response => {
-      let albums = response.data.tracks.items.map(album => Album.fromAlbumDto(album as AlbumDto));
+    return this.spotifyRequest("search/?q=" + albumName + "&type=album", response => {
+      let albums = response.data.albums.items.map(album => Album.fromAlbumDto(album as AlbumDto));
       this.logger.debug("spotify albums response : " + albums);
       return albums;
     })
@@ -85,13 +84,7 @@ export class AppService {
 
   private generateToken(): string {
     this.logger.debug("generateToken()");
-    /* Test
-    const request = require('request');
-    request.post(authOptions, function(error, response, body) {
-      if (!error && response.statusCode === 200) {
-        var token = body.access_token;
-      }
-    });*/
+    /*
     let authOptions = {
       url: 'https://accounts.spotify.com/api/token',
       headers: { "Authorization": "Basic " + (Buffer.from(process.env.USERNAME + ":" + process.env.PASSWORD).toString("base64")) },
@@ -100,7 +93,6 @@ export class AppService {
       },
       json: true
     };
-    /*
     this.httpService.post("https://accounts.spotify.com/api/token", authOptions)
       .pipe(
           map(response => {
@@ -112,7 +104,7 @@ export class AppService {
           console.log(error)
           throw new HttpException(error.response.data, error.response.status) }),
     ).subscribe()*/
-    return "BQASflIvbV4puH_3z2wOe7pGHSYKsqh5UT5YgjyYLNdKVeOZO1e_B3qurcnZ_ZMntZvdmfNwOzwbeRkdbvF-dQHdLu_At-aFrMjNj5rFFP8yuLdFVWITCCaDfa9TaTMgCKBFB7qQUnsmRH8eo5S78gW7oTphpwLw7Ag";
+    return process.env.TOKEN;
   }
 
   private getHeader() {
