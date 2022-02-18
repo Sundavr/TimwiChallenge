@@ -1,47 +1,54 @@
-import { Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put, Query } from '@nestjs/common';
 import { Album } from 'src/album';
+import { MyLogger } from 'src/myLogger';
+import { NewAlbumDto } from './dto/newAlbum.dto';
 import { LibraryService } from './library.service';
 
 @Controller('library')
 export class LibraryController {
-    constructor(private libraryService : LibraryService) {  }
+    private readonly logger = new MyLogger(LibraryController.name);
+
+    constructor(private libraryService : LibraryService) {}
 
     @Get("albums")
-    getAlbums(): Album[] {
+    getAlbums(): Promise<Album[]> {
+        this.logger.verbose("getAlbums()");
         return this.libraryService.getAlbums();
     }
 
     @Get("album/:id")
-    getAlbum(@Param() params) {
-        return this.libraryService.getAlbum(params.id);
+    getAlbum(@Param("id") id: string): Promise<Album> {
+        this.logger.verbose("getAlbum(" + id + ")");
+        return this.libraryService.getAlbum(id);
     }
 
     @Post("album")
-    addAlbum() {
-        // TODO
-        this.libraryService.addAlbum(undefined);
+    addAlbum(@Body() newAlbum: NewAlbumDto): Promise<Album> {
+        this.logger.verbose("addAlbum(" + newAlbum.title + ")");
+        return this.libraryService.addAlbum(newAlbum);
     }
 
     @Delete("album/:id")
-    deleteAlbum(@Param() params) {
-        this.libraryService.removeAlbum(params.id);
+    deleteAlbum(@Param("id") id: string): Promise<Album> {
+        this.logger.verbose("deleteAlbum(" + id + ")");
+        return this.libraryService.removeAlbum(id);
     }
 
     @Post("album/favorite/:id")
-    addFavorite() {
-        // TODO
-        this.libraryService.addFavorite(undefined);
+    addFavorite(@Param("id") id: string): Promise<Album> {
+        this.logger.verbose("addFavorite(" + id + ")");
+        return this.libraryService.addFavorite(id);
     }
 
     @Delete("album/favorite/:id")
-    removeFavorite() {
-        // TODO
-        this.libraryService.removeFavorite(undefined);
+    removeFavorite(@Param("id") id: string): Promise<Album> {
+        this.logger.verbose("removeFavorite(" + id + ")");
+        return this.libraryService.removeFavorite(id);
     }
 
-    @Put("album/:id")
-    addTag(@Param() params) {
-        // TODO
-        this.libraryService.addTag(params.id, undefined);
+    @Put("album")
+    addTag(@Query("ids") ids: string, @Query("tag") tag: string): Promise<number> {
+        this.logger.verbose("addTag([" + ids.split(",") + "], " + tag + ")");
+        return this.libraryService.addTag(ids.split(","), tag);
     }
 }

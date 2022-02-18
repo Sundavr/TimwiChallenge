@@ -14,9 +14,17 @@ describe('AppController', () => {
     appController = app.get<AppController>(AppController);
   });
 
-  describe('root', () => {
-    it('should return "Hello World!"', () => {
-      expect(appController.getHello()).toBe('Hello World!');
+  describe("getHello", () => {
+    it('should return welcome message', () => {
+      expect(appController.getHello()).toBe('Welcome on the codingChallenge backend service');
+    });
+  });
+
+  describe("getAlbum", () => {
+    it('should return "TRON: Legacy Reconfigured"', () => {
+      appController.getAlbum("382ObEPsp2rxGrnsizN5TX,1A2GTWGtFfWp7KSQTwWOyo,2noRn2Aes5aoNVsU6iWThc").subscribe(album => {
+        expect(album.title).toBe("TRON: Legacy Reconfigured");
+      });
     });
   });
 });

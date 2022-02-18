@@ -1,4 +1,4 @@
-import { ArtistDto } from "./DTO/artist.dto";
+import { ArtistDto } from "./dto/artist.dto";
 
 export class Artist {
     id: string;
@@ -7,11 +7,26 @@ export class Artist {
     genres: string[];
     followers: number;
     
-    constructor(artist: ArtistDto) {
-        this.id = artist.id;
-        this.name = artist.name;
-        this.popularity = artist.popularity;
-        this.genres = artist.genres;
-        this.followers = artist.followers.total;
+    constructor(id: string, name: string, popularity: number, genres: string[], followers: number) {
+        this.id = id;
+        this.name = name;
+        this.popularity = popularity;
+        this.genres = genres;
+        this.followers = followers;
+    }
+    
+    /**
+     * Create a new Artist instance given an ArtistDto.
+     * @param artist ArtistDto object
+     * @returns A new Artist instance
+     */
+     static fromArtistDto(artist: ArtistDto) {
+        return new Artist(
+            artist.id,
+            artist.name,
+            artist.popularity,
+            artist.genres,
+            artist.followers.total
+        );
     }
 }

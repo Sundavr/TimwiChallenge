@@ -1,0 +1,22 @@
+[LOG]  -  02/18/2022, 12:34:59 AM - Starting Nest application...
+[LOG]  -  02/18/2022, 12:34:59 AM - MongooseModule dependencies initialized
+[LOG]  -  02/18/2022, 12:34:59 AM - HttpModule dependencies initialized
+[LOG]  -  02/18/2022, 12:34:59 AM - AppModule dependencies initialized
+[LOG]  -  02/18/2022, 12:34:59 AM - MongooseCoreModule dependencies initialized
+[LOG]  -  02/18/2022, 12:34:59 AM - MongooseModule dependencies initialized
+[LOG]  -  02/18/2022, 12:34:59 AM - LibraryModule dependencies initialized
+[LOG]  -  02/18/2022, 12:34:59 AM - AppController {/}:
+[LOG]  -  02/18/2022, 12:34:59 AM - Mapped {/, GET} route
+[LOG]  -  02/18/2022, 12:34:59 AM - Mapped {/album/:id, GET} route
+[LOG]  -  02/18/2022, 12:34:59 AM - Mapped {/artist/:artistId/albums, GET} route
+[LOG]  -  02/18/2022, 12:34:59 AM - Mapped {/search, GET} route
+[LOG]  -  02/18/2022, 12:34:59 AM - LibraryController {/library}:
+[LOG]  -  02/18/2022, 12:34:59 AM - Mapped {/library/albums, GET} route
+[LOG]  -  02/18/2022, 12:34:59 AM - Mapped {/library/album/:id, GET} route
+[LOG]  -  02/18/2022, 12:34:59 AM - Mapped {/library/album, POST} route
+[LOG]  -  02/18/2022, 12:34:59 AM - Mapped {/library/album/:id, DELETE} route
+[LOG]  -  02/18/2022, 12:34:59 AM - Mapped {/library/album/favorite/:id, POST} route
+[LOG]  -  02/18/2022, 12:34:59 AM - Mapped {/library/album/favorite/:id, DELETE} route
+[LOG]  -  02/18/2022, 12:34:59 AM - Mapped {/library/album, PUT} route
+[LOG]  -  02/18/2022, 12:34:59 AM - Nest application successfully started
+[LOG]  -  02/18/2022, 12:34:59 AM - server running on port 3000 ...

@@ -3,33 +3,41 @@ import { HttpException, Injectable } from '@nestjs/common';
 import { catchError, map, Observable } from 'rxjs';
 import { Album } from './album';
 import { Artist } from './artist';
-import { AlbumDto } from './DTO/album.dto';
-import { ArtistDto } from './DTO/artist.dto';
-import { ArtistAlbumDto } from './DTO/artistAlbum.dto';
+import { AlbumDto } from './dto/album.dto';
+import { AlbumFromIdDto } from './dto/albumFromId.dto';
+import { ArtistDto } from './dto/artist.dto';
+import { ArtistAlbumDto } from './dto/artistAlbum.dto';
+import { MyLogger } from './myLogger';
 
 @Injectable()
 export class AppService {
+  private readonly logger = new MyLogger(AppService.name);
   private token: string;
   private spotifyApi: string;
   
   constructor(private httpService: HttpService) {
-    // TODO
     this.token = this.generateToken();
     this.spotifyApi = "https://api.spotify.com/v1/";
   }
 
-  getHello(): string {
+  /**
+   * Returns the index message
+   * @returns the index message
+   */
+  public getHello(): string {
+    this.logger.verbose("getHello()");
     return 'Welcome on the codingChallenge backend service';
   }
-
+  
   /**
    * Returns an album given its ID.
    * @param albumId Album ID
    * @returns An album given its ID.
    */
-  getAlbum(albumId: string): Observable<Album> {
+  public getAlbum(albumId: string): Observable<Album> {
+    this.logger.verbose("getAlbum(" + albumId + ")");
     return this.spotifyRequest("albums/" + albumId, response => {
-      return new Album(response.data as AlbumDto)
+      return Album.fromAlbumFromId(response.data as AlbumFromIdDto)
     });
   }
 
@@ -38,13 +46,12 @@ export class AppService {
    * @param albumName the name of the album to search
    * @returns An observable containing an array of albums that matched to the given name
    */
-  searchAlbum(albumName: string): Observable<Album> {
+  public searchAlbum(albumName: string): Observable<Album> {
+    this.logger.verbose("searchAlbum(" + albumName + ")");
     return this.spotifyRequest("search/?q=" + albumName + "&type=track", response => {
-      console.log(response.data.tracks.items.map(album => {
-        console.log(album)
-        return new Album(album as AlbumDto);
-      }))
-      return response.data.tracks.items.map(album => new Album(album));
+      let albums = response.data.tracks.items.map(album => Album.fromAlbumDto(album as AlbumDto));
+      this.logger.debug("spotify albums response : " + albums);
+      return albums;
     })
   }
 
@@ -53,10 +60,12 @@ export class AppService {
    * @param artistName the name of the artist to search
    * @returns An observable containing an array of artists that matched to the given name
    */
-  searchArtist(artistName: string): Observable<Artist> {
+  public searchArtist(artistName: string): Observable<Artist> {
+    this.logger.verbose("searchArtist(" + artistName + ")");
     return this.spotifyRequest("search/?q=" + artistName + "&type=artist", response => {
-      console.log(response.data.artists.items.map(artist => new Artist(artist)));
-      return response.data.artists.items.map(artist => new Artist(artist as ArtistDto));
+      let artists: Observable<Artist> = response.data.artists.items.map(artist => Artist.fromArtistDto(artist as ArtistDto));
+      this.logger.debug("spotify artists response : " + artists);
+      return artists;
     });
   }
 
@@ -65,18 +74,49 @@ export class AppService {
    * @param artistId ID of this artist
    * @returns 20 albums of this artist
    */
-  getArtistAlbums(artistId: string): Observable<Album> {
+  public getArtistAlbums(artistId: string): Observable<Album> {
+    this.logger.verbose("getArtistAlbums(" + artistId + ")");
     return this.spotifyRequest("artists/" + artistId + "/albums", response => {
-      return response.data.items.map(album => new Album(album as ArtistAlbumDto))
+      let artistAlbums = response.data.items.map(album => Album.fromArtistAlbumDto(album as ArtistAlbumDto));
+      this.logger.debug("spotify artistAlbums response : " + artistAlbums);
+      return artistAlbums;
     });
   }
 
-  private generateToken() {
-    // TODO
-    return "BQDts_lC5pCA_TELMq335zYeUuSOdIsf4O1awgic5yc-gEbzrJYm4-t9ww0LkNXFxSSC76Sq3FypmoRTcNVJQl25Zy9l1ZADgCJHaXhdynVSA8V5HlBSLVoW8qWQMxtY3JsIKqeIY9Z0Ueh_OfoeQIkHB1-u5tcjriM";
+  private generateToken(): string {
+    this.logger.debug("generateToken()");
+    /* Test
+    const request = require('request');
+    request.post(authOptions, function(error, response, body) {
+      if (!error && response.statusCode === 200) {
+        var token = body.access_token;
+      }
+    });*/
+    let authOptions = {
+      url: 'https://accounts.spotify.com/api/token',
+      headers: { "Authorization": "Basic " + (Buffer.from(process.env.USERNAME + ":" + process.env.PASSWORD).toString("base64")) },
+      form: {
+        grant_type: "client_credentials"
+      },
+      json: true
+    };
+    /*
+    this.httpService.post("https://accounts.spotify.com/api/token", authOptions)
+      .pipe(
+          map(response => {
+          console.log("response:");
+          console.log(response);
+          return response;
+        }),
+        catchError(error => { 
+          console.log(error)
+          throw new HttpException(error.response.data, error.response.status) }),
+    ).subscribe()*/
+    return "BQASflIvbV4puH_3z2wOe7pGHSYKsqh5UT5YgjyYLNdKVeOZO1e_B3qurcnZ_ZMntZvdmfNwOzwbeRkdbvF-dQHdLu_At-aFrMjNj5rFFP8yuLdFVWITCCaDfa9TaTMgCKBFB7qQUnsmRH8eo5S78gW7oTphpwLw7Ag";
   }
 
   private getHeader() {
+    this.logger.debug("getHeader()");
     return {
       "Accept": "application/json",
       "Content-Type": "application/json",
@@ -85,12 +125,11 @@ export class AppService {
   }
 
   private spotifyRequest(localUrl: string, callback: Function): Observable<any> {
+    this.logger.debug("spotifyRequest(" + localUrl + ", callback)");
     return this.httpService.get(this.spotifyApi + localUrl, { headers: this.getHeader() })
       .pipe(
         map(response => callback(response)),
-        catchError(error => {
-          throw new HttpException(error.response.data, error.response.status);
-        })
+        catchError(error => { throw new HttpException(error.response.data, error.response.status) })
       );
   }
 }

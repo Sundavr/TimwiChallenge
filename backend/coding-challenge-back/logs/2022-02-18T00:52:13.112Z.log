@@ -1,0 +1,34 @@
+[LOG]  -  02/18/2022, 1:52:13 AM - Starting Nest application...
+[LOG]  -  02/18/2022, 1:52:13 AM - MongooseModule dependencies initialized
+[LOG]  -  02/18/2022, 1:52:13 AM - HttpModule dependencies initialized
+[LOG]  -  02/18/2022, 1:52:13 AM - AppModule dependencies initialized
+[LOG]  -  02/18/2022, 1:52:13 AM - MongooseCoreModule dependencies initialized
+[LOG]  -  02/18/2022, 1:52:13 AM - MongooseModule dependencies initialized
+[LOG]  -  02/18/2022, 1:52:13 AM - LibraryModule dependencies initialized
+[LOG]  -  02/18/2022, 1:52:13 AM - AppController {/}:
+[LOG]  -  02/18/2022, 1:52:13 AM - Mapped {/, GET} route
+[LOG]  -  02/18/2022, 1:52:13 AM - Mapped {/album/:id, GET} route
+[LOG]  -  02/18/2022, 1:52:13 AM - Mapped {/artist/:artistId/albums, GET} route
+[LOG]  -  02/18/2022, 1:52:13 AM - Mapped {/search, GET} route
+[LOG]  -  02/18/2022, 1:52:13 AM - LibraryController {/library}:
+[LOG]  -  02/18/2022, 1:52:13 AM - Mapped {/library/albums, GET} route
+[LOG]  -  02/18/2022, 1:52:13 AM - Mapped {/library/album/:id, GET} route
+[LOG]  -  02/18/2022, 1:52:13 AM - Mapped {/library/album, POST} route
+[LOG]  -  02/18/2022, 1:52:13 AM - Mapped {/library/album/:id, DELETE} route
+[LOG]  -  02/18/2022, 1:52:13 AM - Mapped {/library/album/favorite/:id, POST} route
+[LOG]  -  02/18/2022, 1:52:13 AM - Mapped {/library/album/favorite/:id, DELETE} route
+[LOG]  -  02/18/2022, 1:52:13 AM - Mapped {/library/album, PUT} route
+[LOG]  -  02/18/2022, 1:52:13 AM - Nest application successfully started
+[LOG]  -  02/18/2022, 1:52:13 AM - server running on port 3000 ...
+[VERBOSE]  -  02/18/2022, 1:52:15 AM - [AppController] getAlbums()
+[VERBOSE]  -  02/18/2022, 1:52:15 AM - [AppService] getAlbum(382ObEPsp2rxGrnsizN5TX)
+[ERROR]  -  02/18/2022, 1:52:15 AM - Cannot read properties of undefined (reading 'data'), see full trace:
+	TypeError: Cannot read properties of undefined (reading 'data')
+    at /mnt/d/dev/TimwiChallenge/backend/coding-challenge-back/src/app.service.ts:132:70
+    at /mnt/d/dev/TimwiChallenge/backend/coding-challenge-back/node_modules/rxjs/src/internal/operators/catchError.ts:117:35
+    at OperatorSubscriber._this._error (/mnt/d/dev/TimwiChallenge/backend/coding-challenge-back/node_modules/rxjs/src/internal/operators/OperatorSubscriber.ts:79:13)
+    at OperatorSubscriber.Subscriber.error (/mnt/d/dev/TimwiChallenge/backend/coding-challenge-back/node_modules/rxjs/src/internal/Subscriber.ts:91:12)
+    at OperatorSubscriber._this._next (/mnt/d/dev/TimwiChallenge/backend/coding-challenge-back/node_modules/rxjs/src/internal/operators/OperatorSubscriber.ts:72:25)
+    at OperatorSubscriber.Subscriber.next (/mnt/d/dev/TimwiChallenge/backend/coding-challenge-back/node_modules/rxjs/src/internal/Subscriber.ts:75:12)
+    at /mnt/d/dev/TimwiChallenge/backend/coding-challenge-back/node_modules/@nestjs/axios/dist/http.service.js:61:28
+    at processTicksAndRejections (node:internal/process/task_queues:96:5)
