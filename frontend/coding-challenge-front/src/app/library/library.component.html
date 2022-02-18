@@ -1,3 +1,12 @@
-<div class="albums-menu">
-  
-</div>
+<ul class="list-group">
+    <li *ngFor="let album of albums" class="list-group-item">
+        <span>{{album.title}}</span> {{album.releaseDate}}
+        <div *ngIf="album.favorite" class="favorite">
+            <button title="remove album from favorite" (click)="removeFavorite(album)">❤</button>
+        </div>
+        <div *ngIf="!album.favorite" class="favorite">
+            <button title="add album to favorite" (click)="addFavorite(album)">♡</button>
+        </div>
+        <button class="delete" title="delete album" (click)="deleteAlbum(album)">X</button>
+    </li>
+</ul>

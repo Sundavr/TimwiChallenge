@@ -19,10 +19,6 @@ export class LibraryService {
     public async getAlbums(): Promise<Album[]> {
         this.logger.verbose("getAlbums()");
         const albums = await this.albumModel.find();
-        if (!albums || !albums[0]) {
-            this.logger.warn("Album collection not found or empty");
-            throw new HttpException("Album collection not found or empty", HttpStatus.NOT_FOUND);
-        }
         return albums.map(album => Album.fromAlbumInterface(album));
     }
 

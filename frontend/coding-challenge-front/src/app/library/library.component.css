@@ -3,8 +3,13 @@
 h2 {
     text-align: center;
 }
+
+.favorite {
+    display: inline;
+    margin: 5px;
+}
   
-.albums-menu {
+.albums-library {
     padding: 0;
     margin: auto;
     max-width: 1000px;

@@ -39,6 +39,6 @@ export class AlbumSearchComponent implements OnInit {
   }
 
   addAlbum(album: Album) {
-    console.log(album);
+    this.albumService.addAlbum(album);
   }
 }

@@ -14,36 +14,48 @@ export class AlbumService {
   };
 
   constructor(private http: HttpClient) {}
-
-  // TODO lib
-  public getAlbum(id: number): Observable<Album> {
-    const url = `${environment.apiUrl}/${id}`;
-    return this.http.get<Album>(url).pipe(
-      catchError(this.handleError<Album>(`getAlbum id=${id}`))
+  
+  public getAlbums(): Observable<Album[]> {
+    const url = `${environment.apiUrl}/library/albums`;
+    return this.http.get<Album[]>(url).pipe(
+      catchError(this.handleError<Album[]>('getAlbums', []))
     );
   }
 
-  // TODO lib
-  public updateAlbum(album: Album): Observable<any> {
-    return this.http.put(environment.apiUrl, album, this.httpOptions).pipe(
+  public addToFavorites(album: Album): void {
+    const url = `${environment.apiUrl}/library/album/favorite/${album.id}`;
+    this.http.post(url, this.httpOptions).pipe(
       catchError(this.handleError<any>('updateAlbum'))
-    )
+    ).subscribe();
   }
 
-  // TODO
-  public addAlbum(album: Album): Observable<Album> {
-    console.log("ADD");
-    return this.http.post<Album>(environment.apiUrl, album, this.httpOptions).pipe(
+  public removeFromFavorites(album: Album): void {
+    const url = `${environment.apiUrl}/library/album/favorite/${album.id}`;
+    this.http.delete(url, this.httpOptions).pipe(
+      catchError(this.handleError<any>('updateAlbum'))
+    ).subscribe();
+  }
+
+  public addTag(albums: Album[]): void {
+    // TODO
+    
+  }
+  
+  public addAlbum(album: Album): void {
+    const url = `${environment.apiUrl}/library/album`;
+    console.log(url)
+    this.http.post<Album>(url, album, this.httpOptions).pipe(
+      tap(resp => console.log(resp)),
       catchError(this.handleError<Album>('addAlbum'))
-    );
+    ).subscribe();
   }
 
-  // TODO lib
-  public deleteAlbum(id: number): Observable<Album> {
-    const url = `${environment.apiUrl}/${id}`;
-    return this.http.delete<Album>(url, this.httpOptions).pipe(
+  public deleteAlbum(id: string): void {
+    const url = `${environment.apiUrl}/library/album/${id}`;
+    console.log(url) // TODO
+    this.http.delete<Album>(url, this.httpOptions).pipe(
       catchError(this.handleError<Album>('deleteAlbum'))
-    );
+    ).subscribe();
   }
 
   /* GET albums whose title contains search term */

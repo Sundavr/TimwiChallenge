@@ -2,6 +2,7 @@ import { Logger } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { MyLogger } from './myLogger';
+import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 
 async function bootstrap() {
   let loggerLevel = process.env.LOGGING_LEVEL;
@@ -31,6 +32,17 @@ async function bootstrap() {
     logger.warn("Impossible to read the PORT from .env");
   }
   app.enableCors();
+
+  // swagger
+  const config = new DocumentBuilder()
+    .setTitle("Coding challenge")
+    .setDescription("Coding challenge backend API documentation")
+    .setVersion('1.0')
+    .addTag('swagger')
+    .build();
+  const document = SwaggerModule.createDocument(app, config);
+  SwaggerModule.setup('swagger', app, document);
+
   await app.listen(PORT || 3000);
   logger.log("server running on port " + (PORT || 3000) + " ...");
 }
