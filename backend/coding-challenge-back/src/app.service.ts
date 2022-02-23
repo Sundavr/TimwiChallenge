@@ -45,10 +45,10 @@ export class AppService {
    * @param albumName the name of the album to search
    * @returns An observable containing an array of albums that matched to the given name
    */
-  public searchAlbum(albumName: string): Observable<Album> {
+  public searchAlbum(albumName: string): Observable<Album[]> {
     this.logger.verbose("searchAlbum(" + albumName + ")");
     return this.spotifyRequest("search/?q=" + albumName + "&type=album", response => {
-      let albums = response.data.albums.items.map(album => Album.fromAlbumDto(album as AlbumDto));
+      let albums: Album[] = response.data.albums.items.map(album => Album.fromAlbumDto(album as AlbumDto));
       this.logger.debug("spotify albums response : " + albums);
       return albums;
     })
@@ -59,10 +59,10 @@ export class AppService {
    * @param artistName the name of the artist to search
    * @returns An observable containing an array of artists that matched to the given name
    */
-  public searchArtist(artistName: string): Observable<Artist> {
+  public searchArtist(artistName: string): Observable<Artist[]> {
     this.logger.verbose("searchArtist(" + artistName + ")");
     return this.spotifyRequest("search/?q=" + artistName + "&type=artist", response => {
-      let artists: Observable<Artist> = response.data.artists.items.map(artist => Artist.fromArtistDto(artist as ArtistDto));
+      let artists: Artist[] = response.data.artists.items.map(artist => Artist.fromArtistDto(artist as ArtistDto));
       this.logger.debug("spotify artists response : " + artists);
       return artists;
     });
@@ -73,10 +73,10 @@ export class AppService {
    * @param artistId ID of this artist
    * @returns 20 albums of this artist
    */
-  public getArtistAlbums(artistId: string): Observable<Album> {
+  public getArtistAlbums(artistId: string): Observable<Album[]> {
     this.logger.verbose("getArtistAlbums(" + artistId + ")");
     return this.spotifyRequest("artists/" + artistId + "/albums", response => {
-      let artistAlbums = response.data.items.map(album => Album.fromArtistAlbumDto(album as ArtistAlbumDto));
+      let artistAlbums: Album[] = response.data.items.map(album => Album.fromArtistAlbumDto(album as ArtistAlbumDto));
       this.logger.debug("spotify artistAlbums response : " + artistAlbums);
       return artistAlbums;
     });
